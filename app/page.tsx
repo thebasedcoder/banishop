@@ -1,9 +1,9 @@
 import CategoriySwiper from "@/components/CategoriySwiper";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import Category from "@/components/product/Category";
-import { PopularProductsSwiper } from "@/components/product/PoularProductSwiper";
-import Seasonal from "@/components/product/Seasonal";
+import Category from "@/components/products/Category";
+import { PopularProductsSwiper } from "@/components/products/PoularProductSwiper";
+import Seasonal from "@/components/products/Seasonal";
 
 export default function Home() {
 
