@@ -16,17 +16,12 @@ import { components } from "@/constants/ui";
 import { Input } from "./ui/input";
 import { useState } from "react";
 
-
 export default function Header() {
   const isAuthenticated = false;
   const username = "Reza";
   return (
-    <div className="flex flex-col shadow-3xl border-b w-full sticky top-0 z-50 bg-white">
-      {/* <div className="bg-green-300 px-5 py-1 md:flex space-x-3 items-center hidden">
-        <span className="font-semibold">need help? you can <b>call</b> us any time: 32187698896</span>
-        <Phone className="size-4" />
-      </div> */}
-      <header className="flex items-center justify-between px-5 py-3 flex-shrink-0 ">
+    <div className="flex flex-col border-b w-full sticky top-0 z-50 bg-primary shadow-sm">
+      <header className="flex items-center justify-between px-4 py-3 md:px-6 flex-shrink-0">
         <div className="flex items-center space-x-3">
           <img src="/logoipsum-364.png" alt="" className="h-8 w-32" />
         </div>
@@ -34,13 +29,15 @@ export default function Header() {
         <NavigationMenu className="hidden md:block">
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Home</NavigationMenuTrigger>
+              <NavigationMenuTrigger className="hover:text-[#E11D48] data-[active]:text-[#E11D48] data-[state=open]:text-[#E11D48]">
+                Home
+              </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                   <li className="row-span-3">
                     <NavigationMenuLink asChild>
                       <a
-                        className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-6 no-underline outline-hidden select-none focus:shadow-md"
+                        className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-6 no-underline outline-hidden select-none focus:shadow-md hover:bg-gray-50"
                         href="/"
                       >
                         <div className="mt-4 mb-2 text-lg font-medium">
@@ -65,7 +62,9 @@ export default function Header() {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
+              <NavigationMenuTrigger className="hover:text-[#E11D48] data-[active]:text-[#E11D48] data-[state=open]:text-[#E11D48]">
+                Categories
+              </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                   {components.map((component) => (
@@ -81,48 +80,51 @@ export default function Header() {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+              <NavigationMenuLink asChild className={`${navigationMenuTriggerStyle()} hover:text-[#E11D48] data-[active]:text-[#E11D48]`}>
                 <Link href="/about">About</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                <Link href="/about">something</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
-        {/* search input */}
+
         <SearchInput />
-        <div className="flex items-center space-x-3">
+
+        <div className="flex items-center space-x-2 md:space-x-3">
           <Button className="rounded-full hover:bg-transparent" variant={"ghost"}>
             <div className="relative">
-              <ShoppingCart className="size-6" />
-              <div className="absolute bg-red-500 rounded-md text-white text-xs w-5 h-5 flex items-center justify-center -top-2 -right-2">
+              <ShoppingCart className="size-6 text-gray-700 hover:text-[#E11D48]" />
+              <div className="absolute bg-[#E11D48] rounded-full text-white text-xs w-5 h-5 flex items-center justify-center -top-2 -right-2">
                 24
               </div>
             </div>
           </Button>
-          <Button className="rounded-full hover:bg-transparent hidden md:block" variant={"ghost"}><HelpCircle className="size-6 p-0" /></Button>
-          {isAuthenticated ?
-            <div className="flex items-center space-x-3 rounded-lg hover:hover:bg-accent px-3 py-2">
-              <Avatar className="size-10">
+
+          <Button className="rounded-full hover:bg-transparent hidden md:block" variant={"ghost"}>
+            <HelpCircle className="size-6 p-0 text-gray-700 hover:text-[#E11D48]" />
+          </Button>
+
+          {isAuthenticated ? (
+            <div className="flex items-center space-x-3 rounded-lg hover:bg-accent px-3 py-2">
+              <Avatar className="size-8 md:size-10">
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>{username}</AvatarFallback>
               </Avatar>
-              <span className="font-semibold text-primary hidden md:block">{`Hello, ${username}`}</span>
-            </div> : <>
+              <span className="font-semibold text-[#E11D48] hidden md:block">{`Hello, ${username}`}</span>
+            </div>
+          ) : (
+            <>
               <Link href={"/signin"}>
-                <Button variant={"outline"} className="md:flex items-center border-solid border-primary shadow-md text-primary hover:text-white hover:bg-primary duration-300 hidden">
-                  <LogIn />
-                  singin
+                <Button variant={"outline"} className="hidden md:flex items-center border border-[#E11D48] shadow-sm text-[#E11D48] hover:text-white hover:bg-[#E11D48] duration-300">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Sign In
                 </Button>
-                <User className="md:hidden" />
+                <Button variant={"ghost"} size="icon" className="md:hidden">
+                  <User className="h-5 w-5 text-gray-700 hover:text-[#E11D48]" />
+                </Button>
               </Link>
-            </>}
-
+            </>
+          )}
         </div>
-
       </header>
     </div>
   )
@@ -137,9 +139,9 @@ function ListItem({
   return (
     <li {...props}>
       <NavigationMenuLink asChild>
-        <Link href={href}>
-          <div className="text-sm leading-none font-medium">{title}</div>
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+        <Link href={href} className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-50 hover:text-[#E11D48] focus:bg-gray-50">
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>
         </Link>
@@ -160,7 +162,7 @@ export function SearchInput() {
           <Input
             type="search"
             placeholder="Search for products..."
-            className="pl-10 pr-8 py-2 h-9 rounded-md border border-gray-300 focus:border-green-500 focus:ring-1 focus:ring-green-200 w-full transition-all"
+            className="pl-10 pr-8 py-2 h-9 rounded-md border border-gray-300 focus:border-[#E11D48] focus:ring-1 focus:ring-[#E11D48]/20 w-full transition-all"
           />
         </div>
       </div>
@@ -169,7 +171,7 @@ export function SearchInput() {
       <Button
         variant="ghost"
         size="icon"
-        className="md:hidden text-gray-600 hover:bg-transparent"
+        className="md:hidden text-gray-600 hover:text-[#E11D48] hover:bg-transparent"
         onClick={() => setShowMobileSearch(true)}
       >
         <Search className="h-5 w-5" />
@@ -185,12 +187,12 @@ export function SearchInput() {
                 autoFocus
                 type="search"
                 placeholder="Search..."
-                className="pl-10 pr-4 py-2 h-10 rounded-md border border-gray-300 w-full"
+                className="pl-10 pr-4 py-2 h-10 rounded-md border border-gray-300 w-full focus:border-[#E11D48] focus:ring-1 focus:ring-[#E11D48]/20"
               />
             </div>
             <Button
               variant="ghost"
-              className="ml-2 text-gray-600"
+              className="ml-2 text-[#E11D48]"
               onClick={() => setShowMobileSearch(false)}
             >
               Cancel
@@ -198,7 +200,6 @@ export function SearchInput() {
           </div>
         </div>
       )}
-
     </div>
   )
 }
