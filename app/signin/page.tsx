@@ -17,7 +17,7 @@ export default function Page({ isSignUp = false }) {
       </div>
 
       {/* Left Side - Image (Desktop) */}
-      <div className="hidden md:flex md:w-1/2 bg-green-600 relative overflow-hidden">
+      <div className="hidden md:flex md:w-1/2 bg-primary/20 relative overflow-hidden">
         <Image
           src="/bakery.jpg"
           alt="Fresh groceries"
@@ -25,7 +25,7 @@ export default function Page({ isSignUp = false }) {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-green-600/70 flex items-center justify-center p-12">
+        <div className="absolute inset-0 bg-primary/70 flex items-center justify-center p-12">
           <div className="text-white">
             <h2 className="text-4xl font-bold mb-4">Welcome to FreshMart</h2>
             <p className="text-xl">

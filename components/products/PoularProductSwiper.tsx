@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import PopularProductCard from "./PopularProductCard";
 
 const popularProducts = [
   {
@@ -75,7 +76,7 @@ export function PopularProductsSwiper() {
     <section className="col-span-full py-12 bg-white">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold">Customer Favorites</h2>
+          <h2 className="text-3xl font-bold text-center">Customer Favorites</h2>
           <a href="#" className="text-green-600 hover:underline">
             View All
           </a>
@@ -97,7 +98,7 @@ export function PopularProductsSwiper() {
                   key={product.id}
                   className="pl-2 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
                 >
-                  <div className="p-1">
+                  {/* <div className="p-1">
                     <div className="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all h-full flex flex-col">
                       <div className="relative aspect-square">
                         <Image
@@ -159,7 +160,8 @@ export function PopularProductsSwiper() {
                         </Button>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
+                  <PopularProductCard image={product.image} name={product.name} price={Number(product.price)} originalPrice={Number(product.originalPrice)} rating={product.rating} reviewCount={product.reviewCount} />
                 </CarouselItem>
               ))}
             </CarouselContent>

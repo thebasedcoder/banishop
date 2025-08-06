@@ -1,6 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { Phone, ShoppingCart, HelpCircle, LogIn, Search, User } from 'lucide-react';
+import { ShoppingCart, HelpCircle, LogIn, Search, User } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   NavigationMenu,
@@ -15,58 +15,69 @@ import Link from "next/link";
 import { components } from "@/constants/ui";
 import { Input } from "./ui/input";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { CartSheet } from "./CartSheet";
+import { UserNav } from "./UserNav";
 
 export default function Header() {
-  const isAuthenticated = false;
+  const isAuthenticated = true;
   const username = "Reza";
-  return (
-    <div className="flex flex-col border-b w-full sticky top-0 z-50 bg-primary shadow-sm">
-      <header className="flex items-center justify-between px-4 py-3 md:px-6 flex-shrink-0">
-        <div className="flex items-center space-x-3">
-          <img src="/logoipsum-364.png" alt="" className="h-8 w-32" />
-        </div>
 
+  return (
+    <div className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 shadow-sm">
+      <header className="container flex h-16 items-center justify-between px-4">
+        {/* Logo */}
+        <Link href="/" className="flex items-center space-x-2">
+          <img
+            src="/logoipsum-364.png"
+            alt="Company Logo"
+            className="h-8 w-32 transition-opacity hover:opacity-80"
+          />
+        </Link>
+
+        {/* Desktop Navigation */}
         <NavigationMenu className="hidden md:block">
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="hover:text-[#E11D48] data-[active]:text-[#E11D48] data-[state=open]:text-[#E11D48]">
+              <NavigationMenuTrigger className={navTriggerStyle}>
                 Home
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                <ul className="grid gap-1 p-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                   <li className="row-span-3">
                     <NavigationMenuLink asChild>
-                      <a
-                        className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-6 no-underline outline-hidden select-none focus:shadow-md hover:bg-gray-50"
+                      <Link
+                        className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md hover:bg-gray-50"
                         href="/"
                       >
-                        <div className="mt-4 mb-2 text-lg font-medium">
-                          shadcn/ui
+                        <div className="mb-2 mt-4 text-lg font-medium">
+                          FreshMart
                         </div>
-                        <p className="text-muted-foreground text-sm leading-tight">
-                          Beautifully designed components built with Tailwind CSS.
+                        <p className="text-sm leading-tight text-muted-foreground">
+                          Your premium grocery shopping experience
                         </p>
-                      </a>
+                      </Link>
                     </NavigationMenuLink>
                   </li>
-                  <ListItem href="/docs" title="Introduction">
-                    Re-usable components built using Radix UI and Tailwind CSS.
+                  <ListItem href="/products" title="Browse Products">
+                    Discover our wide selection of fresh groceries
                   </ListItem>
-                  <ListItem href="/docs/installation" title="Installation">
-                    How to install dependencies and structure your app.
+                  <ListItem href="/deals" title="Special Offers">
+                    Current promotions and discounts
                   </ListItem>
-                  <ListItem href="/docs/primitives/typography" title="Typography">
-                    Styles for headings, paragraphs, lists...etc
+                  <ListItem href="/recipes" title="Recipes">
+                    Inspiration for your next meal
                   </ListItem>
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
+
             <NavigationMenuItem>
-              <NavigationMenuTrigger className="hover:text-[#E11D48] data-[active]:text-[#E11D48] data-[state=open]:text-[#E11D48]">
+              <NavigationMenuTrigger className={navTriggerStyle}>
                 Categories
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <ul className="grid w-[400px] gap-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                <ul className="grid w-[400px] gap-1 p-2 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                   {components.map((component) => (
                     <ListItem
                       key={component.title}
@@ -79,47 +90,53 @@ export default function Header() {
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
+
             <NavigationMenuItem>
-              <NavigationMenuLink asChild className={`${navigationMenuTriggerStyle()} hover:text-[#E11D48] data-[active]:text-[#E11D48]`}>
+              <NavigationMenuLink asChild className={cn(navigationMenuTriggerStyle(), navLinkStyle)}>
                 <Link href="/about">About</Link>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
 
+        {/* Search */}
         <SearchInput />
 
+        {/* User Actions */}
         <div className="flex items-center space-x-2 md:space-x-3">
-          <Button className="rounded-full hover:bg-transparent" variant={"ghost"}>
-            <div className="relative">
-              <ShoppingCart className="size-6 text-gray-700 hover:text-[#E11D48]" />
-              <div className="absolute bg-[#E11D48] rounded-full text-white text-xs w-5 h-5 flex items-center justify-center -top-2 -right-2">
-                24
-              </div>
-            </div>
-          </Button>
+          <CartSheet />
 
-          <Button className="rounded-full hover:bg-transparent hidden md:block" variant={"ghost"}>
-            <HelpCircle className="size-6 p-0 text-gray-700 hover:text-[#E11D48]" />
-          </Button>
+
+          <Link href={"/help"}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="hidden rounded-full hover:bg-gray-100 md:flex"
+              aria-label="Help Center"
+            >
+              <HelpCircle className="h-5 w-5 text-gray-700 transition-colors hover:text-[#E11D48]" />
+            </Button>
+          </Link>
 
           {isAuthenticated ? (
-            <div className="flex items-center space-x-3 rounded-lg hover:bg-accent px-3 py-2">
-              <Avatar className="size-8 md:size-10">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>{username}</AvatarFallback>
-              </Avatar>
-              <span className="font-semibold text-[#E11D48] hidden md:block">{`Hello, ${username}`}</span>
-            </div>
+            <UserNav username={username} />
           ) : (
             <>
-              <Link href={"/signin"}>
-                <Button variant={"outline"} className="hidden md:flex items-center border border-[#E11D48] shadow-sm text-[#E11D48] hover:text-white hover:bg-[#E11D48] duration-300">
+              <Link href="/signin">
+                <Button
+                  variant="outline"
+                  className="hidden items-center border-[#E11D48] text-[#E11D48] hover:bg-[#E11D48] hover:text-white md:flex"
+                >
                   <LogIn className="mr-2 h-4 w-4" />
                   Sign In
                 </Button>
-                <Button variant={"ghost"} size="icon" className="md:hidden">
-                  <User className="h-5 w-5 text-gray-700 hover:text-[#E11D48]" />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="md:hidden"
+                  aria-label="Sign In"
+                >
+                  <User className="h-5 w-5 text-gray-700 transition-colors hover:text-[#E11D48]" />
                 </Button>
               </Link>
             </>
@@ -130,6 +147,10 @@ export default function Header() {
   )
 }
 
+// Reusable styles
+const navTriggerStyle = "text-sm font-medium text-gray-800 hover:text-[#E11D48] data-[active]:text-[#E11D48] data-[state=open]:text-[#E11D48]"
+const navLinkStyle = "text-sm font-medium text-gray-800 hover:text-[#E11D48]"
+
 function ListItem({
   title,
   children,
@@ -139,7 +160,10 @@ function ListItem({
   return (
     <li {...props}>
       <NavigationMenuLink asChild>
-        <Link href={href} className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-50 hover:text-[#E11D48] focus:bg-gray-50">
+        <Link
+          href={href}
+          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-50 hover:text-[#E11D48] focus:bg-gray-50"
+        >
           <div className="text-sm font-medium leading-none">{title}</div>
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
@@ -156,38 +180,37 @@ export function SearchInput() {
   return (
     <div className="flex items-center space-x-2">
       {/* Desktop Search */}
-      <div className="relative hidden md:flex items-center w-full max-w-md mx-4 group">
-        <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            type="search"
-            placeholder="Search for products..."
-            className="pl-10 pr-8 py-2 h-9 rounded-md border border-gray-300 focus:border-[#E11D48] focus:ring-1 focus:ring-[#E11D48]/20 w-full transition-all"
-          />
-        </div>
+      <div className="relative hidden md:flex items-center w-full max-w-md">
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <Input
+          type="search"
+          placeholder="Search products..."
+          className="h-9 w-full rounded-md pl-9 pr-4 transition-all focus-visible:ring-[#E11D48]"
+        />
       </div>
 
       {/* Mobile Search Toggle */}
       <Button
         variant="ghost"
         size="icon"
-        className="md:hidden text-gray-600 hover:text-[#E11D48] hover:bg-transparent"
+        className="text-gray-700 hover:bg-gray-100 hover:text-[#E11D48] md:hidden"
         onClick={() => setShowMobileSearch(true)}
+        aria-label="Search"
       >
         <Search className="h-5 w-5" />
       </Button>
 
       {/* Mobile Search Overlay */}
       {showMobileSearch && (
-        <div className="fixed inset-0 bg-white z-50 p-4 flex items-start">
-          <div className="flex items-center w-full mt-2">
+        <div className="fixed inset-0 z-50 flex items-start bg-white p-4">
+          <div className="flex w-full items-center mt-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
                 autoFocus
                 type="search"
                 placeholder="Search..."
-                className="pl-10 pr-4 py-2 h-10 rounded-md border border-gray-300 w-full focus:border-[#E11D48] focus:ring-1 focus:ring-[#E11D48]/20"
+                className="h-10 w-full rounded-md pl-9 pr-4 focus-visible:ring-[#E11D48]"
               />
             </div>
             <Button

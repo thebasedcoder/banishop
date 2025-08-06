@@ -112,7 +112,7 @@ export default function SignForm({ isSignUp = true }) {
                   />
                   <Label htmlFor="remember">Remember me</Label>
                 </div>
-                <Button variant="link" className="p-0 h-auto text-green-600">
+                <Button variant="link" className="p-0 h-auto text-primary">
                   Forgot password?
                 </Button>
               </div>
@@ -120,7 +120,7 @@ export default function SignForm({ isSignUp = true }) {
 
             <Button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700"
+              className="w-full bg-primary hover:bg-red-700"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -142,14 +142,14 @@ export default function SignForm({ isSignUp = true }) {
               {isSignUp ? (
                 <p>
                   Already have an account?{' '}
-                  <Button variant="link" className="p-0 h-auto text-green-600">
+                  <Button variant="link" className="p-0 h-auto text-primary">
                     Sign in
                   </Button>
                 </p>
               ) : (
                 <p>
                   Don't have an account?{' '}
-                  <Button variant="link" className="p-0 h-auto text-green-600">
+                  <Button variant="link" className="p-0 h-auto text-primary">
                     Sign up
                   </Button>
                 </p>
