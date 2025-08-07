@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { ThemeToggle } from '@/components/theme-toggle'; // Make sure to import the ThemeToggle component
 
 export function SettingsForm() {
   // States to manage notification settings
@@ -21,19 +22,17 @@ export function SettingsForm() {
       </CardHeader>
       <CardContent className="space-y-8">
         {/* Theme Setting */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between rounded-lg border p-4">
+        {/* <div className="flex flex-col md:flex-row items-start md:items-center justify-between rounded-lg border p-4">
           <div>
             <Label className="font-semibold text-base">Theme</Label>
             <p className="text-sm text-gray-500 mt-1">
               Select your preferred application theme.
             </p>
           </div>
-          {/* In a real app, this would use Context to change the theme */}
-          <div className="flex space-x-2 mt-4 md:mt-0">
-            <Button variant="outline" className="is-active">Light</Button>
-            <Button variant="ghost">Dark</Button>
+          <div className="mt-4 md:mt-0">
+            <ThemeToggle />
           </div>
-        </div>
+        </div> */}
 
         {/* Email Notifications Setting */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between rounded-lg border p-4">

@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [new URL('https://images.unsplash.com/*'), new URL('https://placehold.co/*')],
   },
+  output: 'standalone',
 };
 
 export default nextConfig;

@@ -61,7 +61,7 @@ const popularProducts = [
     id: 6,
     name: "Cold-Pressed Juice",
     price: "$4.29",
-    image: "https://images.unsplash.com/photo-1603569283847-aa295f0d016a",
+    image: "/bakery.jpg",
     rating: 4.4,
     reviewCount: 65,
   },

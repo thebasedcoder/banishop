@@ -26,7 +26,7 @@ export default function ProductsPage({ searchParams }: { searchParams: { categor
     name: "Organic Avocado",
     price: 2.99,
     originalPrice: 3.49,
-    image: "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716",
+    image: "/fruits.jpg",
     rating: 4.8,
     reviewCount: 124,
     category: "fruits"

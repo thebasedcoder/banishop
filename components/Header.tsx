@@ -1,8 +1,7 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, HelpCircle, LogIn, Search, User } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
+import { HelpCircle, LogIn, Search } from 'lucide-react';
+import { UserButton, useUser } from "@clerk/nextjs"; import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
@@ -11,17 +10,16 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
+
 import Link from "next/link";
 import { components } from "@/constants/ui";
 import { Input } from "./ui/input";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { CartSheet } from "./CartSheet";
-import { UserNav } from "./UserNav";
 
 export default function Header() {
-  const isAuthenticated = true;
-  const username = "Reza";
+  const { isSignedIn } = useUser();
 
   return (
     <div className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 shadow-sm">
@@ -118,28 +116,18 @@ export default function Header() {
             </Button>
           </Link>
 
-          {isAuthenticated ? (
-            <UserNav username={username} />
+          {isSignedIn ? (
+            <UserButton afterSignOutUrl="/" />
           ) : (
-            <>
-              <Link href="/signin">
-                <Button
-                  variant="outline"
-                  className="hidden items-center border-[#E11D48] text-[#E11D48] hover:bg-[#E11D48] hover:text-white md:flex"
-                >
-                  <LogIn className="mr-2 h-4 w-4" />
-                  Sign In
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden"
-                  aria-label="Sign In"
-                >
-                  <User className="h-5 w-5 text-gray-700 transition-colors hover:text-[#E11D48]" />
-                </Button>
-              </Link>
-            </>
+            <Link href="/sign-in">
+              <Button
+                variant="outline"
+                className="hidden items-center border-[#E11D48] text-[#E11D48] hover:bg-[#E11D48] hover:text-white md:flex"
+              >
+                <LogIn className="mr-2 h-4 w-4" />
+                Sign In
+              </Button>
+            </Link>
           )}
         </div>
       </header>

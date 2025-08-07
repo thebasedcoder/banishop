@@ -30,10 +30,6 @@ export default async function OrderDetailPage({ params }: { params: { id: string
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <main className="container flex-1 my-8 md:my-12 px-4">
-        <Link href="/dashboard/orders" className="flex items-center text-sm text-gray-600 hover:text-[#E11D48] transition-colors mb-4">
-          <ChevronLeft className="h-4 w-4 mr-1" />
-          Back to All Orders
-        </Link>
         <OrderDetailView />
       </main>
     </div>
