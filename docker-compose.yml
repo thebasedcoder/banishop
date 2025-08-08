@@ -1,0 +1,59 @@
+version: '3.8'
+services:
+    web:
+      build:
+        context: .
+        dockerfile: Dockerfile
+        args:
+          # This DATABASE_URL is only used during the build to generate Prisma
+          DATABASE_URL: ${DATABASE_URL}
+      ports:
+        - "3000:3000"
+      depends_on:
+        - db
+        - rabbitmq
+      env_file:
+        - .env.production # Load production secrets from this file
+      environment:
+        # This DATABASE_URL is used by the running application
+        - DATABASE_URL=${DATABASE_URL}
+      networks:
+        - app-network
+    rabbitmq:
+      image: rabbitmq:3.13-management-alpine
+      container_name: 'rabbitmq'
+      ports:
+        - "5672:5672"   # Port for your Next.js app to connect
+        - "15672:15672" # Port for the web-based Management UI
+      environment:
+        - RABBITMQ_DEFAULT_USER=user
+        - RABBITMQ_DEFAULT_PASS=password
+      volumes:
+        - rabbitmq_data:/var/lib/rabbitmq/
+      networks:
+        - app-network
+
+    db:
+      image: postgres:17-alpine
+      container_name: 'postgres_db'
+      restart: always
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=rz4/808O!.Banishop.Postgres.Password.rz4/808O!
+        - POSTGRES_DB=my_shop_db
+      ports:
+        - "5432:5432"
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      networks:
+        - app-network
+
+volumes:
+  rabbitmq_data:
+    driver: local
+  postgres_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge

@@ -7,11 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
 const navItems = [
-  { href: '/dashboard', label: 'Profile', icon: <User /> },
-  { href: '/dashboard/addresses', label: 'Addresses', icon: <Home /> },
   { href: '/dashboard/orders', label: 'Orders', icon: <Package /> },
+  { href: '/dashboard/addresses', label: 'Addresses', icon: <Home /> },
   { href: '/dashboard/settings', label: 'Settings', icon: <Settings /> },
-  { href: '/dashboard/security', label: 'Privacy & Security', icon: <Shield /> },
 ];
 
 export function DashboardNav() {
@@ -33,14 +31,6 @@ export function DashboardNav() {
         </Button>
       ))}
       <Separator className="my-4" />
-      <Button
-        variant="ghost"
-        className="w-full justify-start text-md px-4 py-6 text-red-600 hover:bg-red-50 hover:text-red-700"
-        onClick={() => alert("Logged out!")}
-      >
-        <LogOut className="mr-3" />
-        Logout
-      </Button>
     </nav>
   );
 }

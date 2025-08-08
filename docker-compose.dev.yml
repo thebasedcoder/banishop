@@ -1,0 +1,57 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev # Use the development Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - rabbitmq
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql://postgres:rz4%2f808O%21.Banishop.Postgres.Password.rz4%2f808O%21@db:5432/my_shop_db?schema=public
+      - RABBITMQ_URL=amqp://user:password@rabbitmq:5672
+    volumes:
+      - .:/app # <-- This is the magic line!
+      - /app/node_modules # <-- This prevents local node_modules from overwriting the container's
+    networks:
+      - app-network
+
+  # Your db and rabbitmq services remain the same
+  db:
+      image: postgres:17-alpine
+      container_name: 'postgres_db'
+      restart: always
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=rz4/808O!.Banishop.Postgres.Password.rz4/808O!
+        - POSTGRES_DB=my_shop_db
+      ports:
+        - "5432:5432"
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      networks:
+        - app-network
+
+  rabbitmq:
+      image: rabbitmq:3.13-management-alpine
+      container_name: 'rabbitmq'
+      ports:
+        - "5672:5672"   # Port for your Next.js app to connect
+        - "15672:15672" # Port for the web-based Management UI
+      environment:
+        - RABBITMQ_DEFAULT_USER=user
+        - RABBITMQ_DEFAULT_PASS=password
+      volumes:
+        - rabbitmq_data:/var/lib/rabbitmq/
+      networks:
+        - app-network
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
+
+networks:
+  app-network:

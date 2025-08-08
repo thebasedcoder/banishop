@@ -1,6 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { HelpCircle, LogIn, Search } from 'lucide-react';
+import { HelpCircle, LayoutDashboard, LogIn, Search } from 'lucide-react';
 import { UserButton, useUser } from "@clerk/nextjs"; import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,6 +10,13 @@ import { UserButton, useUser } from "@clerk/nextjs"; import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
+import { useRouter } from "next/navigation"; // Import the router
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 import Link from "next/link";
 import { components } from "@/constants/ui";
@@ -17,9 +24,11 @@ import { Input } from "./ui/input";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { CartSheet } from "./CartSheet";
+import { Skeleton } from "./ui/skeleton";
 
 export default function Header() {
-  const { isSignedIn } = useUser();
+  const { isSignedIn, isLoaded } = useUser();
+  const router = useRouter(); // Get the router instance
 
   return (
     <div className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 shadow-sm">
@@ -101,35 +110,87 @@ export default function Header() {
         <SearchInput />
 
         {/* User Actions */}
-        <div className="flex items-center space-x-2 md:space-x-3">
-          <CartSheet />
+        <TooltipProvider>
+          <div className="flex items-center space-x-2 md:space-x-3">
 
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link href={"/help"}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="hidden rounded-full hover:bg-gray-100 md:flex"
+                    aria-label="Help Center"
+                  >
+                    <HelpCircle className="h-5 w-5 text-gray-700 transition-colors hover:text-[#E11D48]" />
+                  </Button>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Help Center</p>
+              </TooltipContent>
+            </Tooltip>
 
-          <Link href={"/help"}>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="hidden rounded-full hover:bg-gray-100 md:flex"
-              aria-label="Help Center"
-            >
-              <HelpCircle className="h-5 w-5 text-gray-700 transition-colors hover:text-[#E11D48]" />
-            </Button>
-          </Link>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <CartSheet />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Shopping Cart</p>
+              </TooltipContent>
+            </Tooltip>
 
-          {isSignedIn ? (
-            <UserButton afterSignOutUrl="/" />
-          ) : (
-            <Link href="/sign-in">
-              <Button
-                variant="outline"
-                className="hidden items-center border-[#E11D48] text-[#E11D48] hover:bg-[#E11D48] hover:text-white md:flex"
-              >
-                <LogIn className="mr-2 h-4 w-4" />
-                Sign In
-              </Button>
-            </Link>
-          )}
-        </div>
+            {!isLoaded ? (
+              // Skeleton loader to prevent layout shift while Clerk is initializing
+              <div className="flex items-center space-x-2">
+                <Skeleton className="h-4 w-20 hidden md:block" />
+                <Skeleton className="h-9 w-9 rounded-full" />
+              </div>
+            ) : isSignedIn ? (
+              <>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link href={"/dashboard"}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="hidden rounded-full hover:bg-gray-100 md:flex"
+                        aria-label="Dashboard"
+                      >
+                        <LayoutDashboard className="h-5 w-5 text-gray-700 transition-colors hover:text-[#E11D48]" />
+                      </Button>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Dashboard</p>
+                  </TooltipContent>
+                </Tooltip>
+                <UserButton
+                  showName={true}
+                  appearance={{
+                    elements: {
+                      userButtonAvatarBox: "h-10 w-10", // Match the size of the skeleton
+                      userButtonPopoverCard: "shadow-lg border-gray-200",
+                    },
+                    variables: {
+                      colorPrimary: "#E11D48", // Your brand's primary color
+                    },
+                  }}
+                />
+              </>
+            ) : (
+              <Link href="/sign-in">
+                <Button
+                  variant="outline"
+                  className="hidden items-center border-[#E11D48] text-[#E11D48] hover:bg-[#E11D48] hover:text-white md:flex"
+                >
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Sign In
+                </Button>
+              </Link>
+            )}
+          </div>
+        </TooltipProvider>
       </header>
     </div>
   )
