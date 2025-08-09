@@ -18,8 +18,20 @@ services:
       - /app/node_modules # <-- This prevents local node_modules from overwriting the container's
     networks:
       - app-network
-
-  # Your db and rabbitmq services remain the same
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    depends_on:
+      - db
+      - rabbitmq
+    env_file:
+      - .env
+    environment:
+      - "postgresql://postgres:rz4%2f808O%21.Banishop.Postgres.Password.rz4%2f808O%21@db:5432/my_shop_db?schema=public"
+      - RABBITMQ_URL=amqp://user:password@rabbitmq:5672
+    networks:
+      - app-network
   db:
       image: postgres:17-alpine
       container_name: 'postgres_db'

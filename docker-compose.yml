@@ -13,7 +13,7 @@ services:
         - db
         - rabbitmq
       env_file:
-        - .env.production # Load production secrets from this file
+        - .env # Load production secrets from this file
       environment:
         # This DATABASE_URL is used by the running application
         - DATABASE_URL=${DATABASE_URL}
@@ -30,6 +30,22 @@ services:
         - RABBITMQ_DEFAULT_PASS=password
       volumes:
         - rabbitmq_data:/var/lib/rabbitmq/
+      networks:
+        - app-network
+
+    worker:
+      build:
+        context: .
+        dockerfile: Dockerfile.worker # Use the new worker Dockerfile
+      depends_on:
+        - db
+        - rabbitmq
+      env_file:
+        - .env
+      environment:
+        # These need to be available to the worker as well
+        - DATABASE_URL=postgresql://postgres:mysecretpassword@db:5432/my_shop_db?schema=public
+        - RABBITMQ_URL=amqp://user:password@rabbitmq:5672
       networks:
         - app-network
 

@@ -3,7 +3,6 @@ change potgres password:docker compose exec -it db psql -U postgres ->ALTER USER
 dev docker:
   Build and start the services;
 
-  docker compose -f docker-compose.dev.yml up --build -d
 
   Run migrations (if you haven't already):
 

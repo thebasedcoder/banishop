@@ -1,7 +1,7 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
-import prisma from '@/lib/prisma';
+import { publishMessage } from '@/lib/rabbitmq'; // Import your RabbitMQ helper
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -36,31 +36,20 @@ export async function POST(req: Request) {
     console.error('Error verifying webhook:', err);
     return new Response('Error occurred', { status: 400 });
   }
-  console.log(evt);
+
   const eventType = evt.type;
 
-  // Handle the webhook event
-  if (eventType === 'user.created') {
-    await prisma.user.create({
-      data: {
-        clerkId: evt.data.id,
-        email: evt.data.email_addresses[0].email_address,
-        name: `${evt.data.first_name} ${evt.data.last_name}`,
-        avatar: evt.data.image_url,
-      },
-    });
+  // Handle the webhook event by publishing a message to RabbitMQ
+  if (eventType === 'user.created' || eventType === 'user.updated') {
+    const message = {
+      type: eventType,
+      data: evt.data, // Pass the entire user data object
+    };
+
+    // Publish the message to a dedicated queue for user synchronization
+    await publishMessage('user_sync', message);
   }
 
-  if (eventType === 'user.updated') {
-    await prisma.user.update({
-      where: { clerkId: evt.data.id },
-      data: {
-        email: evt.data.email_addresses[0].email_address,
-        name: `${evt.data.first_name} ${evt.data.last_name}`,
-        avatar: evt.data.image_url,
-      },
-    });
-  }
-
+  // Immediately return a 200 response to Clerk to acknowledge receipt
   return new Response('', { status: 200 });
 }

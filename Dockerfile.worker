@@ -1,0 +1,21 @@
+# Use the same base image as your main app for consistency
+FROM node:23.11-alpine
+WORKDIR /app
+
+# Copy package files and install dependencies
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+RUN \
+  if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
+
+# Copy the rest of your application code
+COPY . .
+
+# Install ts-node to run the TypeScript worker directly
+RUN npm install -g ts-node
+
+# The command to run when the container starts
+CMD ["ts-node", "worker.ts"]
